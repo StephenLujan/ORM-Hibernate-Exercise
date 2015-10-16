@@ -17,19 +17,19 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Transient
+	//@Transient
 	private String firstName;
 	
-	@Transient
+	//@Transient
 	private String lastName;
 	
-	@Transient
+	//@Transient
 	private LocalDate birthDate;
 	
-	@Transient
+	//@Transient
 	private Integer salary;
 	
-	@Transient
+	//@Transient
 	private Gender gender;
 	
 	@Transient
@@ -54,6 +54,9 @@ public class Employee {
 		this.salary = salary;
 		this.gender = gender;
 	}
+	
+	////////////////////////////////////////////////
+	// Setters and Getters
 
 	public Long getId() {
 		return id;
@@ -117,5 +120,94 @@ public class Employee {
 
 	public void setDepartments(Set<Department> departments) {
 		this.departments = departments;
+	}
+	
+	////////////////////////////////////////////////
+	// Some automatically generated Object method overrides
+
+	@Override
+	public String toString()
+	{
+		return "Employee [id=" + id + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", birthDate=" + birthDate
+				+ ", salary=" + salary + ", gender=" + gender + ", titles="
+				+ titles + ", departments=" + departments + "]";
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((birthDate == null) ? 0 : birthDate.hashCode());
+		result = prime * result
+				+ ((departments == null) ? 0 : departments.hashCode());
+		result = prime * result
+				+ ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((salary == null) ? 0 : salary.hashCode());
+		result = prime * result + ((titles == null) ? 0 : titles.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		if (birthDate == null)
+		{
+			if (other.birthDate != null)
+				return false;
+		} else if (!birthDate.equals(other.birthDate))
+			return false;
+		if (departments == null)
+		{
+			if (other.departments != null)
+				return false;
+		} //else if (!departments.equals(other.departments))
+			//return false;
+		if (firstName == null)
+		{
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (gender != other.gender)
+			return false;
+		if (id == null)
+		{
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (lastName == null)
+		{
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (salary == null)
+		{
+			if (other.salary != null)
+				return false;
+		} else if (!salary.equals(other.salary))
+			return false;
+		if (titles == null)
+		{
+			if (other.titles != null)
+				return false;
+		} //else if (!titles.equals(other.titles))
+			//return false;
+		return true;
 	}
 }
