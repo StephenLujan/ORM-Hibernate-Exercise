@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,10 @@ public class Employee
 	// @Transient
 	private Gender gender;
 
+	// @Transient
+	@Column(unique = true)
+	private String email;
+
 	@Transient
 	private Set<Title> titles = new HashSet<Title>();
 
@@ -53,7 +58,7 @@ public class Employee
 	 * Detailed constructor
 	 */
 	public Employee(String firstName, String lastName, LocalDate birthDate,
-			Integer salary, Gender gender)
+			Integer salary, Gender gender, String email)
 	{
 		super();
 		this.firstName = firstName;
@@ -61,6 +66,7 @@ public class Employee
 		this.birthDate = birthDate;
 		this.salary = salary;
 		this.gender = gender;
+		this.email = email;
 	}
 
 	// //////////////////////////////////////////////
@@ -146,17 +152,18 @@ public class Employee
 		this.departments = departments;
 	}
 
+	public String getEmail()
+	{
+		return email;
+	}
+
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+
 	// //////////////////////////////////////////////
 	// Some automatically generated Object method overrides
-
-	@Override
-	public String toString()
-	{
-		return "Employee [id=" + id + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", birthDate=" + birthDate
-				+ ", salary=" + salary + ", gender=" + gender + ", titles="
-				+ titles + ", departments=" + departments + "]";
-	}
 
 	@Override
 	public int hashCode()
@@ -167,6 +174,7 @@ public class Employee
 				+ ((birthDate == null) ? 0 : birthDate.hashCode());
 		result = prime * result
 				+ ((departments == null) ? 0 : departments.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result
 				+ ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
@@ -225,6 +233,12 @@ public class Employee
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
+		if (email == null)
+		{
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
 		if (salary == null)
 		{
 			if (other.salary != null)
@@ -235,8 +249,18 @@ public class Employee
 		{
 			if (other.titles != null)
 				return false;
-		} // else if (!titles.equals(other.titles))
-			// return false;
+		} else if (!titles.equals(other.titles))
+			return false;
 		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Employee [id=" + id + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", birthDate=" + birthDate
+				+ ", salary=" + salary + ", gender=" + gender + ", email="
+				+ email + ", titles=" + titles + ", departments=" + departments
+				+ "]";
 	}
 }

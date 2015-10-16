@@ -3,7 +3,9 @@
  */
 package hibernate_exercise_one;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import hibernate_exercise_one.app.Application;
 import hibernate_exercise_one.entities.Employee;
 import hibernate_exercise_one.entities.Gender;
@@ -12,22 +14,17 @@ import hibernate_exercise_one.repositories.EmployeeRepository;
 import java.time.LocalDate;
 import java.util.Random;
 
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-
-import org.hibernate.Hibernate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-//@WebAppConfiguration
+// @WebAppConfiguration
 public class BasicAnnotatonTests
 {
 
@@ -61,18 +58,18 @@ public class BasicAnnotatonTests
 		return new Employee(randomName(), randomName(), LocalDate.ofYearDay(
 				random.nextInt(50) + 1950, random.nextInt(365) + 1),
 				random.nextInt(90000) + 20000,
-				Gender.values()[random.nextInt(2)]);
+				Gender.values()[random.nextInt(2)], randomName() + "@mail.com");
 	}
-	
+
 	public Employee createAndSaveEmployee()
 	{
 		return repository.save(createTestEmployee());
 	}
-	
+
 	public Employee readEmployee(long id)
 	{
 		Employee employee = repository.getOne(id);
-		//Hibernate.initialize(employee);
+		// Hibernate.initialize(employee);
 		System.out.println(employee);
 		return employee;
 	}
@@ -102,7 +99,17 @@ public class BasicAnnotatonTests
 		System.out.println(employeeCreate);
 		Long id = employeeCreate.getId();
 		Employee employeeRead = readEmployee(id);
-		//assertEquals(employeeCreate, employeeRead);
-		assertTrue(employeeCreate.equals(employeeRead));
+		// assertEquals(employeeCreate, employeeRead);
+		assertEquals(employeeCreate, employeeRead);
+	}
+
+	@Test(expected = JpaSystemException.class)
+	public void uniqueConstraintOnEmail()
+	{
+		Employee first = createTestEmployee();
+		Employee second = createTestEmployee();
+		second.setEmail(first.getEmail());
+		repository.save(first);
+		repository.save(second);
 	}
 }
