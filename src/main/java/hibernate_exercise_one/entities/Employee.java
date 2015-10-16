@@ -10,43 +10,51 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
+
 @Entity
-public class Employee {
+public class Employee
+{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	//@Transient
+
+	// @Transient
 	private String firstName;
-	
-	//@Transient
+
+	// @Transient
 	private String lastName;
-	
-	//@Transient
+
+	// @Transient
 	private LocalDate birthDate;
-	
-	//@Transient
+
+	// @Transient
 	private Integer salary;
-	
-	//@Transient
+
+	// @Transient
 	private Gender gender;
-	
+
 	@Transient
 	private Set<Title> titles = new HashSet<Title>();
-	
+
 	@Transient
 	private Set<Department> departments = new HashSet<Department>();
 
 	/**
 	 * Default constructor
 	 */
-	Employee(){}
+	Employee()
+	{
+	}
 
 	/**
 	 * Detailed constructor
 	 */
-	public Employee(String firstName, String lastName, LocalDate birthDate, Integer salary, Gender gender) {
+	public Employee(String firstName, String lastName, LocalDate birthDate,
+			Integer salary, Gender gender)
+	{
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -54,75 +62,91 @@ public class Employee {
 		this.salary = salary;
 		this.gender = gender;
 	}
-	
-	////////////////////////////////////////////////
+
+	// //////////////////////////////////////////////
 	// Setters and Getters
 
-	public Long getId() {
+	public Long getId()
+	{
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Long id)
+	{
 		this.id = id;
 	}
 
-	public String getFirstName() {
+	public String getFirstName()
+	{
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName)
+	{
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
+	public String getLastName()
+	{
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName)
+	{
 		this.lastName = lastName;
 	}
 
-	public LocalDate getBirthDate() {
+	public LocalDate getBirthDate()
+	{
 		return birthDate;
 	}
 
-	public void setBirthDate(LocalDate birthDate) {
+	public void setBirthDate(LocalDate birthDate)
+	{
 		this.birthDate = birthDate;
 	}
 
-	public Integer getSalary() {
+	public Integer getSalary()
+	{
 		return salary;
 	}
 
-	public void setSalary(Integer salary) {
+	public void setSalary(Integer salary)
+	{
 		this.salary = salary;
 	}
 
-	public Gender getGender() {
+	public Gender getGender()
+	{
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(Gender gender)
+	{
 		this.gender = gender;
 	}
 
-	public Set<Title> getTitles() {
+	public Set<Title> getTitles()
+	{
 		return titles;
 	}
 
-	public void setTitles(Set<Title> titles) {
+	public void setTitles(Set<Title> titles)
+	{
 		this.titles = titles;
 	}
 
-	public Set<Department> getDepartments() {
+	public Set<Department> getDepartments()
+	{
 		return departments;
 	}
 
-	public void setDepartments(Set<Department> departments) {
+	public void setDepartments(Set<Department> departments)
+	{
 		this.departments = departments;
 	}
-	
-	////////////////////////////////////////////////
+
+	// //////////////////////////////////////////////
 	// Some automatically generated Object method overrides
 
 	@Override
@@ -161,8 +185,13 @@ public class Employee {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (Hibernate.getClass(this) != Hibernate.getClass(obj))
 			return false;
+		if (obj instanceof HibernateProxy)
+		{
+			obj = ((HibernateProxy) obj).getHibernateLazyInitializer()
+					.getImplementation();
+		}
 		Employee other = (Employee) obj;
 		if (birthDate == null)
 		{
@@ -174,8 +203,8 @@ public class Employee {
 		{
 			if (other.departments != null)
 				return false;
-		} //else if (!departments.equals(other.departments))
-			//return false;
+		} // else if (!departments.equals(other.departments))
+			// return false;
 		if (firstName == null)
 		{
 			if (other.firstName != null)
@@ -206,8 +235,8 @@ public class Employee {
 		{
 			if (other.titles != null)
 				return false;
-		} //else if (!titles.equals(other.titles))
-			//return false;
+		} // else if (!titles.equals(other.titles))
+			// return false;
 		return true;
 	}
 }
