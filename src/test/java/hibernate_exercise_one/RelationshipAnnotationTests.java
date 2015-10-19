@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public class RelationshipAnnotationTests {
+public class RelationshipAnnotationTests extends EmployeeTester
+{
 
 }
