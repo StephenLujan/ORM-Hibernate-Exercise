@@ -22,6 +22,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 // @WebAppConfiguration
@@ -32,10 +33,7 @@ public class BasicAnnotatonTests
 	EmployeeRepository repository;
 
 	@Before
-	public void setUp()
-	{
-
-	}
+	public void setUp(){}
 
 	public String randomName()
 	{
@@ -102,14 +100,54 @@ public class BasicAnnotatonTests
 		// assertEquals(employeeCreate, employeeRead);
 		assertEquals(employeeCreate, employeeRead);
 	}
+	
+	public interface EmployeeModifier
+	{
+		public void modify(Employee e);
+	}
+	
+	public interface DoubleEmployeeModifier
+	{
+		public void modify(Employee e1, Employee e2);
+	}
+	
+	public void modify(EmployeeModifier modifier)
+	{
+		Employee e = createTestEmployee();
+		modifier.modify(e);
+		repository.save(e);
+	}
+
+	public void doubleModify(DoubleEmployeeModifier modifier)
+	{
+		Employee first = createTestEmployee();
+		Employee second = createTestEmployee();
+		modifier.modify(first, second);
+		repository.save(first);
+		repository.save(second);
+	}
 
 	@Test(expected = JpaSystemException.class)
 	public void uniqueConstraintOnEmail()
 	{
-		Employee first = createTestEmployee();
-		Employee second = createTestEmployee();
-		second.setEmail(first.getEmail());
-		repository.save(first);
-		repository.save(second);
+		doubleModify( (first, second) -> second.setEmail(first.getEmail()));
+	}
+	
+	@Test(expected = JpaSystemException.class)
+	public void firstNameNonNullConstraint()
+	{
+		modify( e -> e.setFirstName(null));
+	}
+	
+	@Test(expected = JpaSystemException.class)
+	public void lastNameNonNullConstraint()
+	{
+		modify( e -> e.setLastName(null));
+	}
+	
+	@Test(expected = JpaSystemException.class)
+	public void birthDateNonNullConstraint()
+	{
+		modify( e -> e.setFirstName(null));
 	}
 }
