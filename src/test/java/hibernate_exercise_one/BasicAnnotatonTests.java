@@ -29,51 +29,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 // @WebAppConfiguration
-public class BasicAnnotatonTests
+public class BasicAnnotatonTests extends EmployeeTester
 {
-
-	@Autowired
-	EmployeeRepository repository;
 
 	@Before
 	public void setUp(){}
-
-	public String randomName()
-	{
-		Random random = new Random();
-		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-		StringBuilder sb = new StringBuilder();
-		int length = random.nextInt(6) + random.nextInt(6) + 2;
-		for (int i = 0; i < length; i++)
-		{
-			char c = chars[random.nextInt(chars.length)];
-			sb.append(c);
-		}
-		sb.setCharAt(0, (char) (sb.charAt(0) - 32));
-		return sb.toString();
-	}
-
-	public Employee createTestEmployee()
-	{
-		Random random = new Random();
-		return new Employee(randomName(), randomName(), LocalDate.ofYearDay(
-				random.nextInt(50) + 1950, random.nextInt(365) + 1),
-				random.nextInt(90000) + 20000,
-				Gender.values()[random.nextInt(2)], randomName() + "@mail.com");
-	}
-
-	public Employee createAndSaveEmployee()
-	{
-		return repository.save(createTestEmployee());
-	}
-
-	public Employee readEmployee(long id)
-	{
-		Employee employee = repository.getOne(id);
-		// Hibernate.initialize(employee);
-		System.out.println(employee);
-		return employee;
-	}
 
 	@Test
 	public void repositoryExists()
@@ -103,32 +63,7 @@ public class BasicAnnotatonTests
 		// assertEquals(employeeCreate, employeeRead);
 		assertEquals(employeeCreate, employeeRead);
 	}
-	
-	public interface EmployeeModifier
-	{
-		public void modify(Employee e);
-	}
-	
-	public interface DoubleEmployeeModifier
-	{
-		public void modify(Employee e1, Employee e2);
-	}
-	
-	public void modify(EmployeeModifier modifier)
-	{
-		Employee e = createTestEmployee();
-		modifier.modify(e);
-		repository.save(e);
-	}
 
-	public void doubleModify(DoubleEmployeeModifier modifier)
-	{
-		Employee first = createTestEmployee();
-		Employee second = createTestEmployee();
-		modifier.modify(first, second);
-		repository.save(first);
-		repository.save(second);
-	}
 
 	@Test(expected = JpaSystemException.class)
 	public void uniqueConstraintOnEmail()
@@ -223,11 +158,10 @@ public class BasicAnnotatonTests
 	{
 		modify( e -> e.setEmail("asdf@.us"));
 	}
+	
 	@Test(expected = ConstraintViolationException.class)
 	public void emailMustBeCorrectlyFormatted4()
 	{
 		modify( e -> e.setEmail("asdf"));
 	}
-	
-	
 }
