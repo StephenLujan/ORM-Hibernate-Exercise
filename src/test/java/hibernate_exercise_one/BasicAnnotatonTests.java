@@ -12,7 +12,10 @@ import hibernate_exercise_one.entities.Gender;
 import hibernate_exercise_one.repositories.EmployeeRepository;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Random;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -133,21 +136,61 @@ public class BasicAnnotatonTests
 		doubleModify( (first, second) -> second.setEmail(first.getEmail()));
 	}
 	
-	@Test(expected = JpaSystemException.class)
+	@Test(expected = ConstraintViolationException.class)
 	public void firstNameNonNullConstraint()
 	{
 		modify( e -> e.setFirstName(null));
 	}
 	
-	@Test(expected = JpaSystemException.class)
+	@Test(expected = ConstraintViolationException.class)
 	public void lastNameNonNullConstraint()
 	{
 		modify( e -> e.setLastName(null));
 	}
 	
-	@Test(expected = JpaSystemException.class)
+	@Test(expected = ConstraintViolationException.class)
 	public void birthDateNonNullConstraint()
 	{
 		modify( e -> e.setFirstName(null));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void salaryNonNullConstraint()
+	{
+		modify( e -> e.setSalary(null));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void genderNonNullConstraint()
+	{
+		modify( e -> e.setGender(null));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void firstNameMustBeAtLeastTwoLong()
+	{
+		modify( e -> e.setFirstName("A"));
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void firstNameMustBeLessThanFortyLong()
+	{
+		char[] repeat = new char[41];
+		Arrays.fill(repeat, 'x');
+		modify( e -> e.setFirstName(new String(repeat)));
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void lastNameMustBeAtLeastTwoLong()
+	{
+		modify( e -> e.setLastName("A"));
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void lastNameMustBeLessThanFortyLong()
+	{
+		char[] repeat = new char[41];
+		Arrays.fill(repeat, 'x');
+		modify( e -> e.setLastName(new String(repeat)));
 	}
 }

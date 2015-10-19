@@ -1,6 +1,10 @@
 package hibernate_exercise_one.entities;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,20 +36,20 @@ public class Employee
 	private Long id;
 
 	// @Transient
-	@Size(min=2, max=120)
+	@Size(min=2, max=40)
 	@NotNull
 	private String firstName;
 
 	// @Transient
-	@Size(min=2, max=120)
+	@Size(min=2, max=40)
 	@NotNull
 	private String lastName;
 
 	// @Transient
 	@Past
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE) 
 	@NotNull
-	private LocalDate birthDate;
+	private Date birthDate; //TODO try to make LocalDate work 
 
 	// @Transient
 	@Max(1000000)
@@ -59,7 +63,7 @@ public class Employee
 
 	// @Transient
 	@Column(unique = true)
-	@Pattern(regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$")
+	//@Pattern(regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$") //TODO
 	@NotNull
 	private String email;
 
@@ -85,7 +89,7 @@ public class Employee
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.birthDate = birthDate;
+		this.setBirthDate(birthDate);
 		this.salary = salary;
 		this.gender = gender;
 		this.email = email;
@@ -126,12 +130,13 @@ public class Employee
 
 	public LocalDate getBirthDate()
 	{
-		return birthDate;
+		Instant instant = Instant.ofEpochMilli(birthDate.getTime());
+		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
 	}
 
 	public void setBirthDate(LocalDate birthDate)
 	{
-		this.birthDate = birthDate;
+		this.birthDate = Date.from(birthDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 	public Integer getSalary()
