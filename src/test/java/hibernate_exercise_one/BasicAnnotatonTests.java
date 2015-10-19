@@ -173,7 +173,7 @@ public class BasicAnnotatonTests
 	}
 
 	@Test(expected = ConstraintViolationException.class)
-	public void firstNameMustBeLessThanFortyLong()
+	public void firstNameMustAtMostFortyLong()
 	{
 		char[] repeat = new char[41];
 		Arrays.fill(repeat, 'x');
@@ -187,10 +187,47 @@ public class BasicAnnotatonTests
 	}
 
 	@Test(expected = ConstraintViolationException.class)
-	public void lastNameMustBeLessThanFortyLong()
+	public void lastNameMustAtMostFortyLong()
 	{
 		char[] repeat = new char[41];
 		Arrays.fill(repeat, 'x');
 		modify( e -> e.setLastName(new String(repeat)));
 	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void salaryMustBeAtLeastTwentyThousand()
+	{
+		modify( e -> e.setSalary(19999));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void salaryMustBeAtMostAMillion()
+	{
+		modify( e -> e.setSalary(1000001));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void emailMustBeCorrectlyFormatted1()
+	{
+		modify( e -> e.setEmail("asdf@asdf."));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void emailMustBeCorrectlyFormatted2()
+	{
+		modify( e -> e.setEmail("@asdf.us"));
+	}
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void emailMustBeCorrectlyFormatted3()
+	{
+		modify( e -> e.setEmail("asdf@.us"));
+	}
+	@Test(expected = ConstraintViolationException.class)
+	public void emailMustBeCorrectlyFormatted4()
+	{
+		modify( e -> e.setEmail("asdf"));
+	}
+	
+	
 }

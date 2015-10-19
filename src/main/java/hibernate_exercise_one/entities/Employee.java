@@ -63,7 +63,7 @@ public class Employee
 
 	// @Transient
 	@Column(unique = true)
-	//@Pattern(regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$") //TODO
+	@Pattern(regexp="[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]+\\.[A-Za-z]{2,}$")
 	@NotNull
 	private String email;
 
