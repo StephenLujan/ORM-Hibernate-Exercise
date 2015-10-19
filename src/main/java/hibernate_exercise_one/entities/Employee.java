@@ -9,7 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
@@ -20,25 +28,39 @@ public class Employee
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique=true)
 	private Long id;
 
 	// @Transient
+	@Size(min=2, max=120)
+	@NotNull
 	private String firstName;
 
 	// @Transient
+	@Size(min=2, max=120)
+	@NotNull
 	private String lastName;
 
 	// @Transient
+	@Past
+	@Temporal(TemporalType.DATE)
+	@NotNull
 	private LocalDate birthDate;
 
 	// @Transient
+	@Max(1000000)
+	@Min(20000)
+	@NotNull
 	private Integer salary;
 
 	// @Transient
+	@NotNull
 	private Gender gender;
 
 	// @Transient
 	@Column(unique = true)
+	@Pattern(regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$")
+	@NotNull
 	private String email;
 
 	@Transient
