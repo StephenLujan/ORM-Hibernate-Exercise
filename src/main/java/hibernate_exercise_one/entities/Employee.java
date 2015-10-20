@@ -34,7 +34,7 @@ public class Employee
 
 	private String lastName;
 
-	private Date birthDate; // TODO try to make LocalDate work
+	private Date birthDate;
 
 	private Integer salary;
 
