@@ -2,6 +2,7 @@
 An exercise in utilizing JPA and Hibernate for Object-Relational Mapping
 
 ## Exercise One
+Modify the annotations on the class hibernate_exercise_one.entities.Employee to make all of the jUnit tests past in the class hibernate_exercise_one.BasicAnnotatonTests.
 
 ## Resources
 
